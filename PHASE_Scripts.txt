@@ -1,0 +1,239 @@
+PHASE – 2:
+ 1)     Write a SQL query to order records by a rental price  column in ascending order.
+SELECT * FROM capstone.table1_capstone order by RentalPrice asc
+ 
+
+2)    Write a SQL query  to select unique combinations of City and State with their average Rental Price.
+
+SELECT City, StateCode, AVG(RentalPrice) AS AverageRentalPrice
+	FROM table1_capstone
+	GROUP BY City, StateCode;
+
+ 
+3)     Write a SQL query to select the top 5 highest deposit amounts with corresponding Address and City .
+SELECT Address, City, StateCode,Deposit FROM table1_capstone ORDER BY   Deposit DESC
+LIMIT 5;
+
+ 
+
+ 4)      Write a SQL query to select the count of records for each Country along with the total deposit amount.
+SELECT Country, SUM(Deposit) AS TotalDeposit
+FROM table1_capstone
+GROUP BY Country; 
+
+
+
+
+ 5)     Write a SQL query to select records with a Rental Price higher than the average Rental Price across all records.
+SELECT *
+FROM table1_capstone
+WHERE RentalPrice > (SELECT AVG(RentalPrice) FROM table1_capstone);
+ 
+
+
+
+
+
+
+
+
+
+      
+
+
+
+
+
+
+Table2
+
+1)     Write a SQL query to select the average area for each number of bedrooms.
+	SELECT Num_bed, AVG(area) AS average_area FROM  table2_capstone GROUP BY Num_bed;
+ 
+
+2)   Write a SQL query to select records with more than one bathroom and pets allowed.
+SELECT * FROM table2_capstone WHERE Num_Bath > 1  AND PetsAllowed = 'YES';
+ 
+ 3)     Write a SQL query to select the top 3 records with the highest total area (bedrooms + bathrooms).
+SELECT * FROM table2_capstone ORDER BY (Num_bed + Num_bath) DESC LIMIT 3;
+ 
+
+ 4)     Write a SQL query to select the count of records for each combination of bedrooms and bathrooms.
+SELECT Num_bed, Num_bath, COUNT(*) AS record_count FROM table2_capstone GROUP BY Num_bed, Num_bath;
+ 
+ 5)      Write a SQL query to  select records with the largest area where pets are allowed .
+
+SELECT *
+FROM table2_capstone
+WHERE area = (SELECT MAX(area) FROM table2_capstone) and PetsAllowed='YES'
+ 
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+Table3
+ 1)     Write a SQL query to Select records where both Washer/Dryer and AC are available, and order by Sno.
+SELECT * FROM table3_capstone WHERE Washer_Dryer = 'YES' AND AC = 'YES' ORDER BY Sno;
+ 
+
+2)      Write a SQL query to Select records where Hardwood floors are available but neither Roofdeck nor Storage is present, and order by Sno in descending order.
+SELECT * FROM table3_capstone WHERE HardwoodFloors = 'YES'   AND (Roofdeck IS NULL OR Storage IS NULL) ORDER BY Sno DESC;
+ 
+
+
+ 3)     Write a SQL query to Select records where at least four amenities (AC, Parking, Dishwasher, Fireplace) are available, and order by Sno .
+SELECT * FROM table3_capstone WHERE AC = 'YES' AND Parking = 'YES' AND Dishwasher = 'YES' AND Fireplace = 'YES' ORDER BY Sno;
+ 
+
+  4)     Write a SQL query to Select records where neither Roofdeck nor Storage is available, and include the count of such records.
+SELECT COUNT(*) AS RecordCount FROM table3_capstone WHERE Roofdeck IS NULL AND Storage IS NULL;
+ 
+
+
+
+  5)     Write a SQL query to Select records with Parking and either Fireplace or Dishwasher, and include the count of records for each condition.
+SELECT
+    SUM(CASE WHEN Parking = 'YES' THEN 1 ELSE 0 END) AS Parking_Count,
+    SUM(CASE WHEN Fireplace = 'YES' OR Dishwasher = 'YES' THEN 1 ELSE 0 END) AS Fireplace_Dishwasher_Count
+FROM table3_capstone;
+ 
+
+7  Join SQL Queries  using all 3 tables
+1)     Write a SQL  subquery to find records with more than the average area and related details using table 1 and table 2.
+SELECT * FROM table1_capstone
+WHERE AREA > (SELECT AVG(area) FROM table2_capstone);
+ 
+
+2)     Write a subquery to find records in table1 based on conditions pets allowed is ‘YES’  and no of bed is greater than 3   in table2.
+SELECT t1.* FROM table1_capstone t1 LEFT JOIN table2_capstone t2 ON t1.SNO = t2.sno
+WHERE t2.petsallowed = 'YES' AND t2.Num_bed > 3;
+ 
+
+3)        Write a SQL    subquery using both tables (2 and 3) to find records in Table2 with more than 2 bedrooms and related details from Table3 where AC is present .
+SELECT t2.SNO, t2.Num_bed, t3.AC FROM  table2_capstone t2 JOIN table3_capstone t3 ON t2.SNO = t3.SNO WHERE t2.Num_bed > 2 AND t3.AC = 'YES';
+
+ 
+
+4)      Write a sql subquery  to find records in Table2 with pets allowed and a Dishwasher, and include related details from Table3.
+
+SELECT t2.SNO, t2.Num_bed, t3.AC
+FROM  table2_capstone t2
+JOIN table3_capstone t3 ON t2.SNO = t3.SNO
+WHERE t2.Num_bed > 2 AND t3.AC = 'YES';
+SELECT t2.*, t3.*
+FROM table2_capstone t2
+JOIN table3_capstone t3 ON t2.SNO = t3.SNO
+WHERE t2.pets_allowed = 'YES'
+  AND t2.dishwasher = 'YES';
+
+ 
+
+
+
+
+
+
+5)      Write a subquery  to find records in Table2 with the highest area and related details from Table3 where roofdeck is present.
+
+SELECT t2.*, t3.*
+FROM  table2_capstone t2
+JOIN table3_capstone t3 ON t2.SNO = t3.SNO
+WHERE t2.area = (SELECT MAX(area) FROM table2_capstone)
+  AND t3.roofdeck = 'YES';
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+6)     Write a sql  Inner Join to combine information from table1 and table 2.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 7)     Write SQL  Subquery to find records in table1 with pets allowed and a Washer/Dryer, and include details from table2 and table3  .
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
